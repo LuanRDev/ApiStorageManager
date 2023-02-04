@@ -49,7 +49,7 @@ jobs:
 
     - task: FileTransform@1
       inputs:
-        folderPath: '$(build.artifactstagindirectory)/ApiStorageManager.WebApi/'
+        folderPath: '$(build.artifactstagingdirectory)/ApiStorageManager.WebApi/'
         fileType: 'json'
         targetFiles: 'appsettings.json'
 
