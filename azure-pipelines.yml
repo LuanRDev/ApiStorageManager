@@ -58,7 +58,7 @@ jobs:
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)/src/ApiStorageManager.WebApi/'
         Contents: '[Dd]ocker*'
-        TargetFolder: '$(build.artifactsstagingdirectory)/ApiStorageManager.WebApi'
+        TargetFolder: '$(build.artifactstagingdirectory)/ApiStorageManager.WebApi'
     
     - task: PublishBuildArtifacts@1
       displayName: Publish artifacts
