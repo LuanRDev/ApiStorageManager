@@ -21,7 +21,7 @@ namespace ApiStorageManager.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<FileViewModel> GetById(Guid id, string empresa, string codigoEvento)
+        public async Task<FileViewModel> GetById(Guid id, string empresa, int codigoEvento)
         {
             return _mapper.Map<FileViewModel>(await _fileRepository.GetById(id, empresa, codigoEvento));
         }

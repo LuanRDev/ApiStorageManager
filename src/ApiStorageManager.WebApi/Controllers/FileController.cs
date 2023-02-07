@@ -14,7 +14,7 @@ namespace ApiStorageManager.WebApi.Controllers
         }
 
         [HttpGet("file/{empresa}/{codigoEvento}/{id:guid}")]
-        public async Task<FileViewModel> Get(string empresa, string codigoEvento, Guid id)
+        public async Task<FileViewModel> Get(string empresa, int codigoEvento, Guid id)
         {
             return await _fileAppService.GetById(id, empresa, codigoEvento);
         }

@@ -13,7 +13,7 @@ namespace ApiStorageManager.Domain.Models.Messaging
         }
 
         protected void AddError(string message)
-        {
+         {
             ValidationResult.Errors.Add(new ValidationFailure(string.Empty, message));
         }
 
@@ -28,6 +28,10 @@ namespace ApiStorageManager.Domain.Models.Messaging
         {
             return await Commit(uow, "There was an error saving data").ConfigureAwait(false);
         }
-            
+
+        protected async Task<ValidationResult> Commit()
+        {
+            return ValidationResult;
+        }
     }
 }

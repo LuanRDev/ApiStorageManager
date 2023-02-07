@@ -4,14 +4,13 @@ namespace ApiStorageManager.Domain.Commands
 {
     public class UpdateFileCommand : FileCommand
     {   
-        public UpdateFileCommand(Guid id, string name, string empresa, string codigoEvento, string urlAddress, string meta, string type, string extension, byte[] bytes) 
+        public UpdateFileCommand(Guid id, string name, string empresa, int codigoEvento, string metadata, string type, string extension, byte[] bytes) 
         {
             Id = id;
             Name = name;
             Empresa = empresa;
             CodigoEvento = codigoEvento;
-            UrlAddress = urlAddress;
-            Meta = meta;
+            Metadata = metadata;
             Type = type;
             Extension = extension;
             Bytes = bytes;

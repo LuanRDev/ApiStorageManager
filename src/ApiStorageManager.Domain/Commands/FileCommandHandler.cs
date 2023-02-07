@@ -23,7 +23,7 @@ namespace ApiStorageManager.Domain.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var file = new File(Guid.NewGuid(), message.Name, message.Empresa, message.CodigoEvento, message.UrlAddress, message.Meta, message.Type, message.Extension, message.Bytes);
+            var file = new File(message.Id, message.Name, message.Empresa, message.CodigoEvento, message.Metadata, message.Type, message.Extension, message.Bytes);
 
             if(await _fileRepository.GetById(file.Id, file.Empresa, file.CodigoEvento) != null) 
             {
@@ -31,18 +31,18 @@ namespace ApiStorageManager.Domain.Commands
                 return ValidationResult;
             }
 
-            file.AddDomainEvent(new FileUploadedEvent(file.Id, file.Name, file.Meta, file.Type, file.Extension, file.Bytes));
+            file.AddDomainEvent(new FileUploadedEvent(file.Id, file.Name, file.Metadata, file.Type, file.Extension, file.Bytes));
 
             _fileRepository.Add(file);
 
-            return await Commit(_fileRepository.UnitOfWork);
+            return await Commit();
         }
 
         public async Task<ValidationResult> Handle(UpdateFileCommand message, CancellationToken cancellationToken)
         {
             if(!message.IsValid()) return message.ValidationResult;
 
-            var file = new File(Guid.NewGuid(), message.Name, message.Empresa, message.CodigoEvento, message.UrlAddress, message.Meta, message.Type, message.Extension, message.Bytes);
+            var file = new File(Guid.NewGuid(), message.Name, message.Empresa, message.CodigoEvento, message.Metadata, message.Type, message.Extension, message.Bytes);
             var existingFile = await _fileRepository.GetById(file.Id, file.Empresa, file.CodigoEvento);
 
             if(existingFile != null & existingFile.Id != file.Id)
@@ -54,11 +54,11 @@ namespace ApiStorageManager.Domain.Commands
                 }
             }
 
-            file.AddDomainEvent(new FileUpdatedEvent(file.Id, file.Name, file.Meta, file.Type, file.Extension, file.Bytes));
+            file.AddDomainEvent(new FileUpdatedEvent(file.Id, file.Name, file.Metadata, file.Type, file.Extension, file.Bytes));
 
             _fileRepository.Update(file);
 
-            return await Commit(_fileRepository.UnitOfWork);
+            return await Commit();
         }
 
         public async Task<ValidationResult> Handle(DeleteFileCommand message, CancellationToken cancellationToken)
@@ -76,7 +76,7 @@ namespace ApiStorageManager.Domain.Commands
 
             _fileRepository.Delete(file);
 
-            return await Commit(_fileRepository.UnitOfWork);
+            return await Commit();
         }
 
         public void Dispose()

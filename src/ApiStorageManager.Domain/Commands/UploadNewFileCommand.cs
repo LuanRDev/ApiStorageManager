@@ -4,12 +4,11 @@ namespace ApiStorageManager.Domain.Commands
 {
     public class UploadNewFileCommand : FileCommand
     {
-        public UploadNewFileCommand(Guid id, string name, string urlAddress, string meta, string type, string extension, byte[] bytes)
+        public UploadNewFileCommand(Guid id, string name, string metadata, string type, string extension, byte[] bytes)
         {
             Id = id;
             Name = name;
-            UrlAddress= urlAddress;
-            Meta = meta;
+            Metadata = metadata;
             Type = type;
             Extension = extension;
             Bytes = bytes;

@@ -9,9 +9,9 @@ namespace ApiStorageManager.Application.AutoMapper
         public ViewModelToDomainMappingProfile() 
         {
             CreateMap<FileViewModel, UploadNewFileCommand>()
-                .ConstructUsing(c => new UploadNewFileCommand(c.Id, c.Name, c.UrlAdress, c.Meta, c.Type, c.Extension, c.Bytes));
+                .ConstructUsing(c => new UploadNewFileCommand(c.Id, c.Name, c.Metadata, c.Type, c.Extension, c.Bytes));
             CreateMap<FileViewModel, UpdateFileCommand>()
-                .ConstructUsing(c => new UpdateFileCommand(c.Id, c.Name, c.Empresa, c.CodigoEvento, c.UrlAdress, c.Meta, c.Type, c.Extension, c.Bytes));
+                .ConstructUsing(c => new UpdateFileCommand(c.Id, c.Name, c.Empresa, c.CodigoEvento, c.Metadata, c.Type, c.Extension, c.Bytes));
         }
     }
 }

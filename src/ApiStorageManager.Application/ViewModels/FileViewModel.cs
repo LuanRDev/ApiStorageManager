@@ -10,9 +10,8 @@ namespace ApiStorageManager.Application.ViewModels
         [Required]
         public string Name { get; set; }
         public string Empresa { get; set; }
-        public string CodigoEvento { get; set; }
-        public string UrlAdress { get; set; }
-        public string Meta { get; set; }
+        public int CodigoEvento { get; set; }
+        public string Metadata { get; set; }
         public string Type { get; set; }
         public string Extension { get; set; }
         public byte[] Bytes { get; set; }
