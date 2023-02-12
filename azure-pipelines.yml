@@ -10,23 +10,23 @@ variables:
   value: '**/Dockerfile'
 
 - ${{if eq( variables['Build.SourceBranchName'], 'main' ) }}:
-  - name: Supabase.UrlStorage
+  - name: StorageInfo.UrlBase
     value: $(UrlStorage)
-  - name: Supabase.UrlBase
+  - name: SupabaseInfo.StorageEndpoint
     value: $(UrlBase)
-  - name: Supabase.ApiKey
+  - name: SupabaseInfo.ApiKey
     value: $(ApiKey)
-  - name: Supabase.AnonToken
+  - name: SupabaseInfo.AnonKey
     value: $(AnonToken)
 
 - ${{if eq( variables['Build.SourceBranchName'], 'dev' ) }}:
-  - name: Supabase.UrlStorage
+  - name: StorageInfo.UrlBase
     value: $(UrlStorage)
-  - name: Supabase.UrlBase
+  - name: SupabaseInfo.StorageEndpoint
     value: $(UrlBase)
-  - name: Supabase.ApiKey
+  - name: SupabaseInfo.ApiKey
     value: $(ApiKey)
-  - name: Supabase.AnonToken
+  - name: SupabaseInfo.AnonKey
     value: $(AnonToken)
 
 jobs:
