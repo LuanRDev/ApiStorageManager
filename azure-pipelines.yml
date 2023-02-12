@@ -12,21 +12,21 @@ variables:
 - ${{if eq( variables['Build.SourceBranchName'], 'main' ) }}:
   - name: StorageInfo.UrlBase
     value: $(StorageEndpoint)
-  - name: SupabaseInfo.StorageEndpoint
+  - name: StorageInfo.StorageEndpoint
     value: $(UrlBase)
-  - name: SupabaseInfo.ApiKey
+  - name: StorageInfo.ApiKey
     value: $(ApiKey)
-  - name: SupabaseInfo.AnonKey
+  - name: StorageInfo.AnonKey
     value: $(AnonToken)
 
 - ${{if eq( variables['Build.SourceBranchName'], 'dev' ) }}:
   - name: StorageInfo.UrlBase
     value: $(StorageEndpoint)
-  - name: SupabaseInfo.StorageEndpoint
+  - name: StorageInfo.StorageEndpoint
     value: $(UrlBase)
-  - name: SupabaseInfo.ApiKey
+  - name: StorageInfo.ApiKey
     value: $(ApiKey)
-  - name: SupabaseInfo.AnonKey
+  - name: StorageInfo.AnonKey
     value: $(AnonKey)
 
 jobs:
