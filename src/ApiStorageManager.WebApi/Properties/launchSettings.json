@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ApiEventos.WebApi": {
+    "ApiStorageManager.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
