@@ -1,5 +1,6 @@
 using MediatR;
 using ApiStorageManager.WebApi.Configurations;
+using ApiStorageManager.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

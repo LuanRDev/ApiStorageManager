@@ -5,8 +5,29 @@ trigger:
       - dev
 variables:
 - group: BuildVariables
+- group: SupabaseVariables
 - name: dockerfilePath
   value: '**/Dockerfile'
+
+- ${{if eq( variables['Build.SourceBranchName'], 'main' ) }}:
+  - name: StorageInfo.UrlBase
+    value: $(StorageEndpoint)
+  - name: StorageInfo.StorageEndpoint
+    value: $(UrlBase)
+  - name: StorageInfo.ApiKey
+    value: $(ApiKey)
+  - name: StorageInfo.AnonKey
+    value: $(AnonToken)
+
+- ${{if eq( variables['Build.SourceBranchName'], 'dev' ) }}:
+  - name: StorageInfo.UrlBase
+    value: $(StorageEndpoint)
+  - name: StorageInfo.StorageEndpoint
+    value: $(UrlBase)
+  - name: StorageInfo.ApiKey
+    value: $(ApiKey)
+  - name: StorageInfo.AnonKey
+    value: $(AnonKey)
 
 jobs:
 - job: Build
