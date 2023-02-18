@@ -23,9 +23,9 @@ namespace ApiStorageManager.Domain.Commands
         {
             if (!message.IsValid()) return message.ValidationResult;
 
-            var file = new File(message.Id, message.Name, message.Empresa, message.CodigoEvento, message.Metadata, message.Type, message.Extension, message.Bytes);
-
-            if(await _fileRepository.GetById(file.Id, file.Empresa, file.CodigoEvento) != null) 
+            File file = new File(message.Id, message.Name, message.Empresa, message.CodigoEvento, message.Metadata, message.Type, message.Extension, message.Bytes);
+            File foundFile = await _fileRepository.GetById(file.Id, file.Empresa, file.CodigoEvento);
+            if (foundFile != null)
             {
                 AddError("The file has already been sent, please use the Update method.");
                 return ValidationResult;
