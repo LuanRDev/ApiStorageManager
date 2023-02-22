@@ -1,8 +1,12 @@
 using MediatR;
 using ApiStorageManager.WebApi.Configurations;
 using ApiStorageManager.WebApi.Middlewares;
+using ApiStorageManager.WebApi.Logging;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddSerilog(builder.Configuration, "API StorageManager");
+Log.Information("Starting StorageManager API");
 
 builder.Host.ConfigureAppConfiguration(app => app.AddConfiguration(
     new ConfigurationBuilder()
@@ -14,6 +18,8 @@ builder.Host.ConfigureAppConfiguration(app => app.AddConfiguration(
     ));
 
 // Add services to the container.
+
+builder.Services.AddElasticsearch(builder.Configuration);
 
 builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 {
@@ -45,6 +51,8 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
+
+app.UseSerilog();
 
 app.MapControllers();
 
