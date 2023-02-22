@@ -54,8 +54,9 @@ namespace ApiStorageManager.Infra.Repositories
         public async void Add(File file)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
-            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");  
+            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
 
+            request.RequestUri = new Uri($"{_configuration["StorageInfo:UrlBase"]}/{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
             request.Headers.Accept.Add(mediaType);
             request.Headers.Add("ApiKey", _configuration["StorageInfo:ApiKey"]);
             request.Headers.Add("Authorization", $"Bearer {_configuration["StorageInfo:AnonToken"]}");
