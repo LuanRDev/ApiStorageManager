@@ -19,12 +19,12 @@ namespace ApiStorageManager.Domain.Models
             Id = id;
             Empresa = empresa;
             CodigoEvento = codigoEvento;
-            Url = $"eventos/empresas/{Empresa}/{CodigoEvento}/documentos/{Id}";
             Name = name;
             Metadata = metadata;
             Type = type;
             Extension = extension;
             Bytes = bytes;
+            Url = $"eventos/empresas/{Empresa}/{CodigoEvento}/documentos/{Id}.{Extension}";
         }
 
         private void ValidateFile(Guid id, string name, string empresa, int codigoEvento, string meta, string type, string extension, byte[] bytes)
@@ -53,7 +53,11 @@ namespace ApiStorageManager.Domain.Models
             {
                 throw new InvalidOperationException("The file Type is needed.");
             }
-            if(bytes == null)
+            if (string.IsNullOrEmpty(extension))
+            {
+                throw new InvalidOperationException("The file Extension is needed.");
+            }
+            if (bytes == null)
             {
                 throw new InvalidOperationException("The file Bytes are needed.");
             }
