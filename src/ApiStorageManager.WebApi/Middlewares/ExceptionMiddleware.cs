@@ -1,4 +1,5 @@
 ﻿using ApiStorageManager.WebApi.Models;
+using Serilog;
 using System.Net;
 
 namespace ApiStorageManager.WebApi.Middlewares
@@ -32,7 +33,17 @@ namespace ApiStorageManager.WebApi.Middlewares
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             await context.Response.WriteAsync(new ErrorDetails()
             {
-                Message = "Internal Server Error."
+                Message = "Internal Server Error.",
+                Details = exception.Message,
+                TraceId = context.TraceIdentifier
+                
+            }.ToString());
+            Log.Error(new ErrorDetails()
+            {
+                Message = "Internal Server Error.",
+                Details = exception.Message,
+                TraceId = context.TraceIdentifier
+
             }.ToString());
         }
     }
