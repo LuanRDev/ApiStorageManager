@@ -27,7 +27,8 @@ namespace ApiStorageManager.Infra.Repositories
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]);
+
+                client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]!);
                 var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 using (var stream = await response.Content.ReadAsStreamAsync())
                 {
@@ -58,14 +59,12 @@ namespace ApiStorageManager.Infra.Repositories
 
             request.RequestUri = new Uri($"{_configuration["StorageInfo:UrlBase"]}/{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
             request.Headers.Accept.Add(mediaType);
-            request.Headers.Add("ApiKey", _configuration["StorageInfo:ApiKey"]);
-            request.Headers.Add("Authorization", $"Bearer {_configuration["StorageInfo:AnonToken"]}");
+            request.Headers.Add("Authorization", $"Bearer {_configuration["StorageInfo:ApiKey"]}");
 
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
             {
                 client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]);
-
                 HttpContent bytesContent = new ByteArrayContent(file.Bytes);
                 bytesContent.Headers.ContentType = new MediaTypeHeaderValue(file.Type);
 
@@ -79,6 +78,7 @@ namespace ApiStorageManager.Infra.Repositories
                 else
                 {
                     var details = await response.Content.ReadAsStringAsync();
+                    throw new Exception(details);
                 }
             }
         }
@@ -89,8 +89,8 @@ namespace ApiStorageManager.Infra.Repositories
             var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
 
             request.Headers.Accept.Add(mediaType);
-            request.Headers.Add("ApiKey", _configuration["StorageInfo:ApiKey"]);
-            request.Headers.Add("Authorization", _configuration["StorageInfo:AnonKey"]);
+            request.Headers.Add("ApiKey", _configuration["StorageInfo:AnonKey"]);
+            request.Headers.Add("Authorization", _configuration["StorageInfo:ApiKey"]);
 
             using (var client = new HttpClient())
             using (var formData = new MultipartFormDataContent())
