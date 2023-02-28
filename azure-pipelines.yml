@@ -6,6 +6,8 @@ trigger:
 variables:
 - group: BuildVariables
 - group: SupabaseVariables
+- group: APIsUrlsVariables
+- group: ElasticSearchVariables
 - name: dockerfilePath
   value: '**/Dockerfile'
 
@@ -18,6 +20,14 @@ variables:
     value: $(ApiKey)
   - name: StorageInfo.AnonKey
     value: $(AnonToken)
+  - name: ElasticConfiguration.Uri
+    value: $(ElasticUri)
+  - name: ElasticConfiguration.Username
+    value: $(ElasticUsername)    
+  - name: ElasticConfiguration.Password
+    value: $(ElasticPassword)    
+  - name: ElasticConfiguration.DefaultIndex
+    value: $(ElasticDefaultIndex)
 
 - ${{if eq( variables['Build.SourceBranchName'], 'dev' ) }}:
   - name: StorageInfo.UrlBase
@@ -28,6 +38,14 @@ variables:
     value: $(ApiKey)
   - name: StorageInfo.AnonKey
     value: $(AnonKey)
+  - name: ElasticConfiguration.Uri
+    value: $(ElasticUri)
+  - name: ElasticConfiguration.Username
+    value: $(ElasticUsername)    
+  - name: ElasticConfiguration.Password
+    value: $(ElasticPassword)    
+  - name: ElasticConfiguration.DefaultIndex
+    value: $(ElasticDefaultIndex)
 
 jobs:
 - job: Build
