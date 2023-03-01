@@ -1,6 +1,7 @@
 ﻿using ApiStorageManager.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Headers;
 using File = ApiStorageManager.Domain.Models.File;
 
@@ -71,13 +72,13 @@ namespace ApiStorageManager.Infra.Repositories
                 formData.Add(bytesContent, "fileName", file.Name);
                 request.Content = bytesContent;
                 var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                if (response.IsSuccessStatusCode)
+                var details = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK && details.Contains("Key"))
                 {
-                    var details = await response.Content.ReadAsStringAsync();
+                    return;
                 }
                 else
                 {
-                    var details = await response.Content.ReadAsStringAsync();
                     throw new Exception(details);
                 }
             }
