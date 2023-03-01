@@ -15,7 +15,7 @@ namespace ApiStorageManager.Infra.Data
             _eventStoreRepository = eventStoreRepository;
         }
 
-        public void Save<T>(T theEvent) where T : Event 
+        public async Task Save<T>(T theEvent) where T : Event 
         {
             var serializedData = JsonConvert.SerializeObject(theEvent);
 
