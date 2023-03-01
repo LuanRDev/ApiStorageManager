@@ -4,6 +4,6 @@ namespace ApiStorageManager.Domain.Interfaces
 {
     public interface IEventStore
     {
-        void Save<T>(T theEvent) where T : Event;
+        Task Save<T>(T theEvent) where T : Event;
     }
 }

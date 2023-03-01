@@ -6,8 +6,8 @@ namespace ApiStorageManager.Domain.Interfaces
     {
         Task<File> GetById(Guid id, string empresa, int codigoEvento);
 
-        void Add(File file);
-        void Update(File file);
-        void Delete(File file);
+        Task Add(File file);
+        Task Update(File file);
+        Task Delete(File file);
     }
 }

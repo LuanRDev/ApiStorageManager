@@ -52,7 +52,7 @@ namespace ApiStorageManager.Infra.Repositories
             }
         }
 
-        public async void Add(File file)
+        public async Task Add(File file)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
             var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -83,7 +83,7 @@ namespace ApiStorageManager.Infra.Repositories
             }
         }
 
-        public async void Update(File file) 
+        public async Task Update(File file) 
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
             var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
@@ -110,7 +110,7 @@ namespace ApiStorageManager.Infra.Repositories
             }
         }
 
-        public async void Delete(File file) 
+        public async Task Delete(File file) 
         {
             var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
             var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
