@@ -3,6 +3,8 @@ using ApiStorageManager.WebApi.Configurations;
 using ApiStorageManager.WebApi.Middlewares;
 using ApiStorageManager.WebApi.Logging;
 using Serilog;
+using ApiStorageManager.WebApi.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddSerilog(builder.Configuration, "API StorageManager");
@@ -34,6 +36,9 @@ builder.Services.AddSwaggerConfiguration();
 builder.Services.AddAutoMapperConfiguration();
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDependencyInjectionConfiguration();
+builder.Services.AddSingleton(typeof(IAuthorizationPolicyProvider), typeof(AuthorizationPolicyProvider));
+builder.Services.AddSingleton(typeof(IAuthorizationHandler), typeof(HasScopeHandler));
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,6 +54,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
