@@ -66,12 +66,15 @@ namespace ApiStorageManager.Infra.Repositories
             using (var formData = new MultipartFormDataContent())
             {
                 client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]);
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _configuration["StorageInfo:ApiKey"]);
+                
                 HttpContent bytesContent = new ByteArrayContent(file.Bytes);
                 bytesContent.Headers.ContentType = new MediaTypeHeaderValue(file.Type);
 
                 formData.Add(bytesContent, "fileName", file.Name);
                 request.Content = bytesContent;
-                var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                var response = await client.PostAsync($"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}", formData);
                 var details = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.OK && details.Contains("Key"))
                 {
