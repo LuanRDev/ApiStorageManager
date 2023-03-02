@@ -72,90 +72,57 @@ namespace ApiStorageManager.Infra.Repositories
             catch (Exception ex)
             {
                 throw new Exception("Ocorreu um erro ao inserir o arquivo no bucket", ex);
-            }
-            /*var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
-            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
-
-            request.RequestUri = new Uri($"{_configuration["StorageInfo:UrlBase"]}/{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
-            request.Headers.Accept.Add(mediaType);
-            request.Headers.Add("Authorization", $"Bearer {_configuration["StorageInfo:ApiKey"]}");
-
-            using (var client = new HttpClient())
-            using (var formData = new MultipartFormDataContent())
-            {
-                client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]);
-                client.DefaultRequestHeaders.Accept.Add(mediaType);
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _configuration["StorageInfo:ApiKey"]);
-                
-                HttpContent bytesContent = new ByteArrayContent(file.Bytes);
-                bytesContent.Headers.ContentType = new MediaTypeHeaderValue(file.Type);
-
-                formData.Add(bytesContent, "fileName", file.Name);
-                request.Content = bytesContent;
-                var response = await client.PostAsync($"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}", formData);
-                var details = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode == HttpStatusCode.OK && details.Contains("Key"))
-                {
-                    return;
-                }
-                else
-                {
-                    throw new Exception(details);
-                }
-            }*/
+            } 
         }
 
         public async Task Update(File file) 
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
-            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+            var url = _configuration["StorageInfo:StorageEndpoint"];
+            var key = _configuration["StorageInfo:ApiKey"];
+            var supabase = new Supabase.Client(url, key, new Supabase.SupabaseOptions { AutoConnectRealtime = true });
+            await supabase.InitializeAsync();
 
-            request.Headers.Accept.Add(mediaType);
-            request.Headers.Add("ApiKey", _configuration["StorageInfo:AnonKey"]);
-            request.Headers.Add("Authorization", _configuration["StorageInfo:ApiKey"]);
+            var storage = supabase.Storage;
+            var exists = await storage.GetBucket("eventos") != null;
+            if (!exists)
+                throw new Exception("O bucket informado não exite.");
 
-            using (var client = new HttpClient())
-            using (var formData = new MultipartFormDataContent())
+            var bucket = storage.From("eventos");
+            try
             {
-                client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]);
-
-                HttpContent bytesContent = new ByteArrayContent(file.Bytes);
-                bytesContent.Headers.ContentType = new MediaTypeHeaderValue(file.Type);
-
-                formData.Add(bytesContent, "fileName", file.Name);
-
-                var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                if (response.IsSuccessStatusCode)
-                {
-                    var details = await response.Content.ReadAsStringAsync();
-                }
+                await bucket.Update(file.Bytes, file.Url);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao atualizar o arquivo no bucket", ex);
             }
         }
 
         public async Task Delete(File file) 
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
-            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
 
-            request.Headers.Accept.Add(mediaType);
-            request.Headers.Add("ApiKey", _configuration["StorageInfo:ApiKey"]);
-            request.Headers.Add("Authorization", _configuration["StorageInfo:AnonKey"]);
+            var url = _configuration["StorageInfo:StorageEndpoint"];
+            var key = _configuration["StorageInfo:ApiKey"];
+            var supabase = new Supabase.Client(url, key, new Supabase.SupabaseOptions { AutoConnectRealtime = true });
+            await supabase.InitializeAsync();
 
-            using (var client = new HttpClient())
-            using (var formData = new MultipartFormDataContent())
+            var storage = supabase.Storage;
+            var exists = await storage.GetBucket("eventos") != null;
+            if (!exists)
+                throw new Exception("O bucket informado não exite.");
+
+            var bucket = storage.From("eventos");
+            List<string> filePath = new()
             {
-                client.BaseAddress = new Uri(_configuration["StorageInfo:UrlBase"]);
-
-                HttpContent bytesContent = new ByteArrayContent(file.Bytes);
-                bytesContent.Headers.ContentType = new MediaTypeHeaderValue(file.Type);
-
-                formData.Add(bytesContent, "fileName", file.Name);
-
-                var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                if (response.IsSuccessStatusCode)
-                {
-                    var details = await response.Content.ReadAsStringAsync();
-                }
+                file.Url
+            };
+            try
+            {
+                await bucket.Remove(filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao inserir o arquivo no bucket", ex);
             }
         }
 
