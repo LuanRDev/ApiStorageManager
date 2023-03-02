@@ -1,7 +1,6 @@
 ﻿using ApiStorageManager.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System.Net;
 using System.Net.Http.Headers;
 using File = ApiStorageManager.Domain.Models.File;
 
@@ -55,7 +54,26 @@ namespace ApiStorageManager.Infra.Repositories
 
         public async Task Add(File file)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
+            var url = _configuration["StorageInfo:StorageEndpoint"];
+            var key = _configuration["StorageInfo:ApiKey"];
+            var supabase = new Supabase.Client(url, key, new Supabase.SupabaseOptions { AutoConnectRealtime = true });
+            await supabase.InitializeAsync();
+
+            var storage = supabase.Storage;
+            var exists = await storage.GetBucket("eventos") != null;
+            if (!exists)
+                throw new Exception("O bucket informado não exite.");
+
+            var bucket = storage.From("eventos");
+            try
+            {
+                await bucket.Upload(file.Bytes, file.Url);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao inserir o arquivo no bucket", ex);
+            }
+            /*var request = new HttpRequestMessage(HttpMethod.Post, $"{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
             var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
 
             request.RequestUri = new Uri($"{_configuration["StorageInfo:UrlBase"]}/{_configuration["StorageInfo:StorageEndpoint"]}/{file.Url}");
@@ -84,7 +102,7 @@ namespace ApiStorageManager.Infra.Repositories
                 {
                     throw new Exception(details);
                 }
-            }
+            }*/
         }
 
         public async Task Update(File file) 
