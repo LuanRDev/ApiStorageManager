@@ -60,11 +60,11 @@ namespace ApiStorageManager.Infra.Repositories
             await supabase.InitializeAsync();
 
             var storage = supabase.Storage;
-            var exists = await storage.GetBucket("eventos") != null;
+            var exists = await storage.GetBucket("empresas") != null;
             if (!exists)
                 throw new Exception("O bucket informado não exite.");
 
-            var bucket = storage.From("eventos");
+            var bucket = storage.From("empresas");
             try
             {
                 await bucket.Upload(file.Bytes, file.Url);
