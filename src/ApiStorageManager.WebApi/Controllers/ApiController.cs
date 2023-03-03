@@ -1,10 +1,12 @@
 ﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ApiStorageManager.WebApi.Controllers
 {
     [ApiController]
+    [Authorize("ApiStorageManager")]
     public abstract class ApiController : ControllerBase
     {
         private readonly ICollection<string> _errors = new List<string>();
