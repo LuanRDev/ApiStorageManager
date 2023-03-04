@@ -38,15 +38,6 @@ builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddSwaggerConfiguration();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Insira um token válido",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
-    });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -55,7 +46,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = "Bearer",
                 }
             },
             new string[]{}
