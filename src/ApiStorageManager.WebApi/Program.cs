@@ -35,9 +35,16 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 
 builder.Services.AddControllers();
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
-builder.Services.AddSwaggerConfiguration();
 builder.Services.AddSwaggerGen(c =>
 {
+    c.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Description = "Insira um token válido",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -46,10 +53,10 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer",
+                    Id = "Bearer"
                 }
             },
-            new string[]{}
+            new List<string>()
         }
     });
 });
